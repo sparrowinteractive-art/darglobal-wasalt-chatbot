@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DarGlobal & Wasalt Property Assistant</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏙️</text></svg>">
+<style>
+:root{--bg:#0f1115;--panel:#171a21;--panel2:#1f232c;--text:#e8e9ec;--muted:#9aa0ab;--accent:#c9a961;--accent2:#7cc4ff;--user:#2a3140;--border:#2a2f3a}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column}
+header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--panel)}
+header h1{font-size:16px;margin:0;font-weight:600}
+header .sub{font-size:12px;color:var(--muted)}
+header .dot{width:8px;height:8px;border-radius:50%;background:#4caf50;margin-left:auto}
+header .dot.off{background:#e05353}
+main{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;max-width:900px;width:100%;margin:0 auto}
+.msg{max-width:85%;padding:12px 16px;border-radius:14px;line-height:1.5;font-size:15px;white-space:pre-wrap;word-wrap:break-word}
+.msg.user{align-self:flex-end;background:var(--user);border-bottom-right-radius:4px}
+.msg.bot{align-self:flex-start;background:var(--panel2);border-bottom-left-radius:4px;white-space:normal}
+.msg.bot p{margin:0 0 8px}.msg.bot ul,.msg.bot ol{margin:4px 0 8px 20px;padding:0}.msg.bot li{margin:2px 0}
+.msg.bot a{color:var(--accent2);text-decoration:none}.msg.bot a:hover{text-decoration:underline}
+.msg.bot strong{color:var(--accent)}
+.meta{font-size:11px;color:var(--muted);margin-top:8px;border-top:1px solid var(--border);padding-top:6px}
+.meta a{color:var(--muted)}
+.src{display:inline-block;background:var(--bg);border:1px solid var(--border);border-radius:999px;padding:2px 8px;margin:2px 4px 0 0;font-size:11px}
+.src.darglobal{border-color:#6b5a2e}.src.wasalt{border-color:#2e5a6b}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 20px 8px;max-width:900px;width:100%;margin:0 auto}
+.chip{background:var(--panel);border:1px solid var(--border);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--muted)}
+.chip:hover{color:var(--text);border-color:var(--accent)}
+form{display:flex;gap:10px;padding:14px 20px 20px;max-width:900px;width:100%;margin:0 auto}
+input{flex:1;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:15px;outline:none}
+input:focus{border-color:var(--accent)}
+button{padding:12px 18px;border-radius:12px;border:none;background:var(--accent);color:#111;font-weight:600;cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+.typing{color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <span style="font-size:22px">🏙️</span>
+  <div><h1>DarGlobal &amp; Wasalt Property Assistant</h1><div class="sub">RAG chatbot over publicly scraped data · free OpenRouter model</div></div>
+  <span class="dot" id="dot" title="API status"></span>
+</header>
+<main id="chat">
+  <div class="msg bot">Hi! Ask me about <strong>DarGlobal</strong> luxury projects (Dubai, Riyadh, Jeddah, Muscat, Doha, Marbella, London) or <strong>Wasalt</strong> property listings across Saudi Arabia.</div>
+</main>
+<div class="chips" id="chips"></div>
+<form id="form">
+  <input id="input" placeholder="e.g. What DarGlobal projects are in Saudi Arabia?" autocomplete="off" />
+  <button id="send" type="submit">Send</button>
+</form>
+<script src="config.js"></script>
+<script>
+const API = (window.API_BASE || "").replace(/\/$/, "");
+const chat = document.getElementById("chat"), form = document.getElementById("form"), input = document.getElementById("input"), send = document.getElementById("send");
+const history = [];
+const suggestions = [
+  "What DarGlobal projects are in Saudi Arabia?",
+  "Tell me about Trump Tower Jeddah",
+  "Which DarGlobal projects are in Oman and when do they complete?",
+  "What is the median price of apartments for sale in Riyadh on Wasalt?",
+  "Show me villas for rent in Jeddah",
+  "Why should I invest with DarGlobal in Dubai?"
+];
+const chips = document.getElementById("chips");
+suggestions.forEach(s => { const c = document.createElement("span"); c.className = "chip"; c.textContent = s; c.onclick = () => { input.value = s; form.requestSubmit(); }; chips.appendChild(c); });
+
+fetch(API + "/health").then(r => r.json()).then(h => { document.getElementById("dot").classList.toggle("off", !h.llm_key_configured); }).catch(() => document.getElementById("dot").classList.add("off"));
+
+function md(text) {
+  let h = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  h = h.replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  h = h.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  h = h.replace(/`([^`]+)`/g, "<code>$1</code>");
+  const lines = h.split("\n"); let out = "", inList = false;
+  for (const line of lines) {
+    const m = line.match(/^\s*(?:[-*•]|\d+[.)])\s+(.*)$/);
+    if (m) { if (!inList) { out += "<ul>"; inList = true; } out += "<li>" + m[1] + "</li>"; }
+    else { if (inList) { out += "</ul>"; inList = false; } if (line.trim()) out += "<p>" + line.replace(/^#+\s*/, "") + "</p>"; }
+  }
+  if (inList) out += "</ul>";
+  return out;
+}
+function add(role, text) { const d = document.createElement("div"); d.className = "msg " + role; if (role === "user") d.textContent = text; else d.innerHTML = text; chat.appendChild(d); chat.scrollTop = chat.scrollHeight; return d; }
+
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  const q = input.value.trim(); if (!q) return;
+  input.value = ""; send.disabled = true; chips.style.display = "none";
+  add("user", q);
+  const bot = add("bot", '<span class="typing">Searching the knowledge base…</span>');
+  let answer = "", sources = [], model = "";
+  try {
+    const resp = await fetch(API + "/api/chat/stream", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: q, history: history.slice(-6) }) });
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    const reader = resp.body.getReader(); const dec = new TextDecoder(); let buf = "";
+    while (true) {
+      const { value, done } = await reader.read(); if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let idx;
+      while ((idx = buf.indexOf("\n\n")) >= 0) {
+        const block = buf.slice(0, idx); buf = buf.slice(idx + 2);
+        const ev = (block.match(/^event: (.*)$/m) || [])[1]; const data = (block.match(/^data: (.*)$/m) || [])[1];
+        if (!ev) continue;
+        const val = data ? JSON.parse(data) : null;
+        if (ev === "sources") sources = val;
+        else if (ev === "model") model = val;
+        else if (ev === "token") { answer += val; bot.innerHTML = md(answer); chat.scrollTop = chat.scrollHeight; }
+        else if (ev === "error") { answer += "\n\n⚠️ " + val; bot.innerHTML = md(answer); }
+      }
+    }
+  } catch (err) { bot.innerHTML = md("⚠️ Could not reach the API: " + err.message); }
+  if (!answer) bot.innerHTML = md("⚠️ The model returned no answer. Please try again.");
+  const meta = document.createElement("div"); meta.className = "meta";
+  meta.innerHTML = (model ? "Model: " + model + "<br>" : "") + (sources.length ? "Sources: " + sources.slice(0, 6).map(s => `<a class="src ${s.source}" href="${s.url}" target="_blank" rel="noopener">${s.title.replace(/</g, "&lt;")}</a>`).join("") : "");
+  bot.appendChild(meta);
+  history.push({ role: "user", content: q }, { role: "assistant", content: answer });
+  send.disabled = false; input.focus();
+});
+</script>
+</body>
+</html>
