@@ -6,3 +6,4 @@ data/raw/*.html
 data/index/
 .DS_Store
 node_modules/
+data/raw/*.log

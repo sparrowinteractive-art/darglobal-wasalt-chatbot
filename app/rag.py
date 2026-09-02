@@ -121,12 +121,35 @@ class KnowledgeBase:
         order = idx[np.argsort(-scores)][:k]
         return [self.docs[i]["id"] for i in order]
 
+    COUNTRY_WORDS = {
+        "oman": "Oman", "muscat": "Oman", "aida": "Oman",
+        "saudi": "Saudi Arabia", "ksa": "Saudi Arabia", "riyadh": "Saudi Arabia", "jeddah": "Saudi Arabia",
+        "uae": "United Arab Emirates", "emirates": "United Arab Emirates", "dubai": "United Arab Emirates",
+        "ras al khaimah": "United Arab Emirates", "rak": "United Arab Emirates",
+        "qatar": "Qatar", "doha": "Qatar", "spain": "Spain", "marbella": "Spain", "benahav": "Spain",
+        "uk": "United Kingdom", "united kingdom": "United Kingdom", "london": "United Kingdom", "england": "United Kingdom",
+        "maldives": "Maldives",
+    }
+
+    def _catalogue(self, query: str) -> list[str]:
+        """Catalogue docs to inject for 'which projects are in <country>' style questions."""
+        q = query.lower()
+        if not re.search(r"\b(project|projects|development|developments|portfolio|properties|build|building)\b", q):
+            return []
+        countries = {c for w, c in self.COUNTRY_WORDS.items() if re.search(rf"\b{re.escape(w)}\b", q)}
+        ids = [f"dg-country-{re.sub(r'[^a-z0-9]+', '-', c.lower())}" for c in countries]
+        if not ids:
+            ids = ["dg-catalogue-all"]
+        return [i for i in ids if i in self.by_id]
+
     def search(self, query: str, k: int | None = None) -> list[dict]:
         k = k or config.TOP_K
         source = self._source_filter(query)
         dense = self._dense(query, k * 2, source)
         sparse = self._sparse(query, k * 2, source)
         structured = self._structured(query, 4) if source != "darglobal" else []
+        if source != "wasalt":
+            structured = self._catalogue(query) + structured
         # reciprocal rank fusion
         fused: dict[str, float] = {}
         for rank, did in enumerate(dense):
