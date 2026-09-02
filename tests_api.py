@@ -6,7 +6,7 @@ def check(name, cond, info=""):
     print(("PASS" if cond else "FAIL"), name, info)
     if not cond: fails.append(name)
 r=httpx.get(B+"/health"); h=r.json()
-check("health 200 + fields", r.status_code==200 and h["status"]=="ok" and h["documents"]>3000 and len(h["models"])==4, f"docs={h['documents']}")
+check("health 200 + fields", r.status_code==200 and h["status"]=="ok" and h["documents"]>3000 and len(h["models"])>=1 and h["llm_key_configured"], f"docs={h['documents']}")
 r=httpx.get(B+"/"); check("index html served", r.status_code==200 and "Property Assistant" in r.text and "text/html" in r.headers["content-type"])
 r=httpx.get(B+"/nope"); check("404 for unknown route", r.status_code==404)
 t0=time.time(); r=httpx.get(B+"/api/search",params={"q":"Trump Tower Jeddah","k":3}); dt=time.time()-t0

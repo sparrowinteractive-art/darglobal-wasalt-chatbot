@@ -1,4 +1,9 @@
-"""OpenRouter chat client with a free-model fallback chain and streaming."""
+"""Chat client for OpenAI-compatible providers with a model fallback chain and streaming.
+
+Providers (OpenRouter free models first, then any optional extra provider)
+come from ``config.PROVIDERS``. Each model is tried in order; on rate limits,
+provider errors, or an empty response the next one is used.
+"""
 from __future__ import annotations
 
 import json
@@ -11,83 +16,73 @@ from . import config
 
 log = logging.getLogger("llm")
 
-RETRYABLE = {402, 408, 429, 500, 502, 503, 504}
+RETRYABLE = {402, 404, 408, 429, 500, 502, 503, 504}
 
 
 class LLMError(RuntimeError):
     pass
 
 
-def _headers() -> dict:
-    return {
-        "Authorization": f"Bearer {config.OPENROUTER_API_KEY}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": config.APP_URL,
-        "X-Title": config.APP_TITLE,
-    }
+async def _stream_one(client: httpx.AsyncClient, provider: dict, model: str, messages: list[dict], temperature: float, max_tokens: int):
+    """Yield content tokens for one provider/model; raise LLMError on failure."""
+    headers = {"Authorization": f"Bearer {provider['key']}", "Content-Type": "application/json", **provider.get("headers", {})}
+    payload = {"model": model, "messages": messages, "temperature": temperature, "max_tokens": max_tokens, "stream": True}
+    async with client.stream("POST", provider["base"] + "/chat/completions", headers=headers, json=payload) as resp:
+        if resp.status_code != 200:
+            body = (await resp.aread()).decode(errors="ignore")[:300]
+            raise LLMError(f"HTTP {resp.status_code} {body}", ) from None
+        async for line in resp.aiter_lines():
+            if not line.startswith("data:"):
+                continue
+            data = line[5:].strip()
+            if data == "[DONE]":
+                break
+            try:
+                obj = json.loads(data)
+            except json.JSONDecodeError:
+                continue
+            if obj.get("error"):
+                raise LLMError(f"mid-stream error {obj['error']}")
+            choices = obj.get("choices") or []
+            if not choices:
+                continue
+            text = (choices[0].get("delta") or {}).get("content")
+            if text:
+                yield text
 
 
 async def stream_chat(messages: list[dict], temperature: float = 0.2, max_tokens: int = 900) -> AsyncIterator[tuple[str, str]]:
-    """Yield ("model", name) once, then ("token", text) chunks.
+    """Yield ("model", "provider/model") once, then ("token", text) chunks.
 
-    Tries each model in config.OPENROUTER_MODELS in order; moves to the next
-    on rate limits, provider errors, or an empty response. Raises LLMError if
-    every model fails.
+    Raises LLMError if every provider/model combination fails.
     """
-    if not config.OPENROUTER_API_KEY:
-        raise LLMError("OPENROUTER_API_KEY is not set")
+    if not config.PROVIDERS:
+        raise LLMError("No LLM provider configured: set OPENROUTER_API_KEY (or SARVAM_API_KEY)")
     errors = []
-    async with httpx.AsyncClient(base_url=config.OPENROUTER_BASE, timeout=httpx.Timeout(90, connect=15)) as client:
-        for model in config.OPENROUTER_MODELS:
-            payload = {
-                "model": model,
-                "messages": messages,
-                "temperature": temperature,
-                "max_tokens": max_tokens,
-                "stream": True,
-            }
-            produced = False
-            try:
-                async with client.stream("POST", "/chat/completions", headers=_headers(), json=payload) as resp:
-                    if resp.status_code != 200:
-                        body = (await resp.aread()).decode(errors="ignore")[:300]
-                        errors.append(f"{model}: HTTP {resp.status_code} {body}")
-                        log.warning("model %s failed: %s %s", model, resp.status_code, body)
-                        if resp.status_code in RETRYABLE or resp.status_code == 404:
-                            continue
-                        raise LLMError(errors[-1])
-                    async for line in resp.aiter_lines():
-                        if not line.startswith("data:"):
-                            continue
-                        data = line[5:].strip()
-                        if data == "[DONE]":
-                            break
-                        try:
-                            obj = json.loads(data)
-                        except json.JSONDecodeError:
-                            continue
-                        if obj.get("error"):
-                            errors.append(f"{model}: {obj['error']}")
-                            log.warning("model %s mid-stream error: %s", model, obj["error"])
-                            break
-                        choices = obj.get("choices") or []
-                        if not choices:
-                            continue
-                        delta = choices[0].get("delta") or {}
-                        text = delta.get("content")
-                        if text:
-                            if not produced:
-                                produced = True
-                                yield ("model", model)
-                            yield ("token", text)
-                if produced:
-                    return
-            except (httpx.HTTPError, httpx.StreamError) as exc:
-                errors.append(f"{model}: {exc!r}")
-                log.warning("model %s transport error: %r", model, exc)
-                if produced:
-                    return
-                continue
+    async with httpx.AsyncClient(timeout=httpx.Timeout(120, connect=15)) as client:
+        for provider in config.PROVIDERS:
+            for model in provider["models"]:
+                label = f"{provider['name']}/{model}"
+                produced = False
+                try:
+                    async for text in _stream_one(client, provider, model, messages, temperature, max_tokens):
+                        if not produced:
+                            produced = True
+                            yield ("model", label)
+                        yield ("token", text)
+                    if produced:
+                        return
+                    errors.append(f"{label}: empty response")
+                except LLMError as exc:
+                    errors.append(f"{label}: {exc}")
+                    log.warning("model %s failed: %s", label, exc)
+                    if produced:
+                        return  # partial answer already streamed; do not restart with another model
+                except (httpx.HTTPError, httpx.StreamError) as exc:
+                    errors.append(f"{label}: {exc!r}")
+                    log.warning("model %s transport error: %r", label, exc)
+                    if produced:
+                        return
     raise LLMError("All models failed: " + " | ".join(errors))
 
 

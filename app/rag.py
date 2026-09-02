@@ -22,7 +22,8 @@ Rules:
 - Answer ONLY from the CONTEXT passages below. They were scraped from the two public websites on 2026-09-02.
 - If the context does not contain the answer, say you don't have that information in your data and suggest what the user could ask instead. Never invent projects, prices, dates or listings.
 - Be concise and factual. Use short paragraphs or bullet points. Prices are in SAR for Wasalt unless stated otherwise.
-- When you mention a specific project or listing, cite its source with a markdown link using the URL given in the passage, e.g. [Trump Tower Jeddah](https://...).
+- When you mention a specific project or listing, cite its source with a markdown link using the URL given in the passage, e.g. [Trump Tower Jeddah](https://...). Never cite with bracketed numbers like [1] or [2]; the passage numbers are for your reference only.
+- For "how many listings" questions, quote the site-wide count from the Wasalt guide passage when available, and present snapshot counts as the sampled subset.
 - Wasalt listings are a sample of the marketplace, not the full inventory. Market snapshot figures are computed from that sample, say so when quoting them.
 - Do not give legal or financial advice; you may summarise what the websites say about investment benefits.
 - Reply in the language of the user's question (English or Arabic)."""
@@ -30,6 +31,33 @@ Rules:
 
 def _tokenize(text: str) -> list[str]:
     return re.findall(r"[a-z0-9؀-ۿ]+", text.lower())
+
+
+# The embedding model is English-only, so Arabic questions get key terms
+# translated and appended before retrieval (the model still sees the original).
+AR_TERMS = {
+    "دار غلوبال": "DarGlobal", "دارغلوبال": "DarGlobal", "وصلت": "Wasalt", "ترامب": "Trump",
+    "مشاريع": "projects", "مشروع": "project", "عقارات": "properties", "عقار": "property",
+    "شقق": "apartments", "شقة": "apartment", "فلل": "villas", "فيلا": "villa", "أرض": "land", "اراضي": "land", "أراضي": "land",
+    "عمارة": "building", "دور": "floor", "للبيع": "for sale", "للإيجار": "for rent", "للايجار": "for rent", "إيجار": "rent",
+    "سعر": "price", "أسعار": "prices", "اسعار": "prices", "متوسط": "median", "غرف": "bedrooms", "غرفة": "bedroom",
+    "جدة": "Jeddah", "الرياض": "Riyadh", "مكة": "Makkah", "المدينة": "Madinah", "الدمام": "Dammam", "الخبر": "Al Khobar",
+    "الظهران": "Dhahran", "الطائف": "Taif", "بريدة": "Buraidah", "أبها": "Abha", "تبوك": "Tabuk", "الجبيل": "Jubail",
+    "الأحساء": "Al Ahsa", "ينبع": "Yanbu", "حائل": "Hail", "دبي": "Dubai", "عمان": "Oman", "مسقط": "Muscat", "قطر": "Qatar",
+    "الدوحة": "Doha", "إسبانيا": "Spain", "لندن": "London", "السعودية": "Saudi Arabia", "الإمارات": "UAE",
+    "مرافق": "amenities", "موقع": "location", "استثمار": "investment", "تسليم": "completion", "متى": "when", "كم": "how many",
+}
+
+
+def is_arabic(text: str) -> bool:
+    return bool(re.search(r"[؀-ۿ]", text))
+
+
+def expand_query(query: str) -> str:
+    if not is_arabic(query):
+        return query
+    extra = [en for ar, en in AR_TERMS.items() if ar in query]
+    return query + (" " + " ".join(extra) if extra else "")
 
 
 class KnowledgeBase:
@@ -153,14 +181,29 @@ class KnowledgeBase:
             ids = ["dg-catalogue-all"]
         return [i for i in ids if i in self.by_id]
 
+    def _guides(self, query: str) -> list[str]:
+        """Inject the city guide docs (site-wide counts) for 'how many listings' questions."""
+        q = query.lower()
+        if not re.search(r"how many|number of|count|total|كم", q):
+            return []
+        city = next((v for w, v in self.CITY_WORDS.items() if w in q), None)
+        if not city:
+            return []
+        slug = re.sub(r"[^a-z0-9]+", "-", city.lower())
+        ids = [f"ws-guide-properties-for-{p}-in-{slug}-0" for p in ("sale", "rent")]
+        return [i for i in ids if i in self.by_id]
+
     def search(self, query: str, k: int | None = None) -> list[dict]:
         k = k or config.TOP_K
+        query = expand_query(query)
         source = self._source_filter(query)
         dense = self._dense(query, k * 2, source)
         sparse = self._sparse(query, k * 2, source)
         structured = self._structured(query, 4) if source != "darglobal" else []
         if source != "wasalt":
             structured = self._catalogue(query) + structured
+        if source != "darglobal":
+            structured = self._guides(query) + structured
         # reciprocal rank fusion
         fused: dict[str, float] = {}
         for rank, did in enumerate(dense):
@@ -202,7 +245,8 @@ class KnowledgeBase:
         for h in history[-config.MAX_HISTORY:]:
             if h.get("role") in ("user", "assistant") and h.get("content"):
                 msgs.append({"role": h["role"], "content": str(h["content"])[:2000]})
-        msgs.append({"role": "user", "content": f"CONTEXT:\n{context}\n\nQUESTION: {question}"})
+        hint = "\n(The question is in Arabic: answer in Arabic, keeping project names and URLs as they are.)" if is_arabic(question) else ""
+        msgs.append({"role": "user", "content": f"CONTEXT:\n{context}\n\nQUESTION: {question}{hint}"})
         return msgs
 
 

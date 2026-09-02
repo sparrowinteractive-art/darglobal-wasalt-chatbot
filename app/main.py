@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import time
 from pathlib import Path
 
@@ -62,8 +63,9 @@ async def health():
     return {
         "status": "ok",
         "documents": len(kb.docs),
-        "models": config.OPENROUTER_MODELS,
-        "llm_key_configured": bool(config.OPENROUTER_API_KEY),
+        "models": config.MODEL_CHAIN,
+        "providers": [p["name"] for p in config.PROVIDERS],
+        "llm_key_configured": bool(config.PROVIDERS),
     }
 
 
@@ -78,6 +80,7 @@ async def chat(req: ChatRequest):
         model, answer = await llm.complete(messages)
     except llm.LLMError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
+    answer = re.sub(r"\s?\[\d+(?:,\s*\d+)*\]", "", answer)  # drop passage-number citations
     return {"answer": answer, "model": model, "sources": _sources(passages), "latency_ms": int((time.time() - t0) * 1000)}
 
 

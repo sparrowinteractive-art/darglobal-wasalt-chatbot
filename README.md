@@ -31,6 +31,9 @@ Browser (Vercel static page) ──► FastAPI /api/chat/stream ──► hybrid
 - OpenRouter free models: `google/gemma-4-31b-it:free` primary, with `z-ai/glm-5.2:free`,
   `nvidia/nemotron-3-super-120b-a12b:free` and `minimax/minimax-m2.7:free` as automatic fallbacks
   when a model is rate limited
+- Optional extra provider: Sarvam AI (`sarvam-105b-conversations`) is used as a
+  fallback after the OpenRouter chain when `SARVAM_API_KEY` is set. Any
+  OpenAI-compatible endpoint can be added the same way in `app/config.py`.
 - Docker multi-stage image with the index and embedding model baked in
 - Static chat UI deployed on Vercel, calling the containerised API
 

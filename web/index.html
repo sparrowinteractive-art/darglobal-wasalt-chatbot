@@ -159,6 +159,7 @@ function inline(h) {
   return h.replace(/`([^`]+)`/g, "<code>$1</code>");
 }
 function md(text) {
+  text = text.replace(/\s?\[\d+(?:,\s*\d+)*\]/g, "");  // drop passage-number citations the model may emit
   const lines = esc(text).split("\n"); let out = "", list = null, table = [];
   const flushTable = () => { if (!table.length) return; const rows = table.filter(r => !/^\s*\|?\s*:?-{2,}/.test(r)); out += "<table>" + rows.map((r, i) => "<tr>" + r.replace(/^\s*\||\|\s*$/g, "").split("|").map(c => (i ? "<td>" : "<th>") + inline(c.trim()) + (i ? "</td>" : "</th>")).join("") + "</tr>").join("") + "</table>"; table = []; };
   for (const line of lines) {

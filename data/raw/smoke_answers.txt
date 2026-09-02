@@ -1,0 +1,156 @@
+
+### What DarGlobal projects are in Saudi Arabia?
+[sarvam/sarvam-105b-conversations | 15918 ms]
+
+Based on the context, DarGlobal has 7 projects in Saudi Arabia:
+
+- **Trump Park Residences**: Apartments in Amaya, Jeddah; completion December 2030 [Trump Park Residences](https://www.darglobal.co.uk/trump-plaza/park-residences)
+- **Trump Mansions**: Villas in Rayana, Wadi Safar, Riyadh [Trump Mansions](https://www.darglobal.co.uk/rayana/trump-mansions)
+- **Trump Executive Residences**: Villas in Amaya, Jeddah; completion December 2029 [Trump Executive Residences](https://www.darglobal.co.uk/trump-plaza/executive-residences)
+- **Amaya**: Villas in Amaya, Jeddah; completion December 2029 [Amaya](https://www.darglobal.co.uk/amaya/amaya-plots)
+- **Padel Living Residences**: Apartments in Jeddah; completion December 2029 [Padel Living Residences](https://www.darglobal.co.uk/amaya/padel-living)
+- **Neptune Interiors by Mouawad**: Villas in Riyadh; 5 Bedrooms; completion December 2027 [Neptune](https://www.darglobal.co.uk/neptune)
+- **Trump Tower Jeddah**: Apartments; Seafront Residences in Jeddah; completion December 2029 [Trump Tower Jeddah](https://www.darglobal.co.uk/trump-tower-jeddah)
+sources: ['https://www.darglobal.co.uk/projects', 'https://www.darglobal.co.uk/blog', 'https://www.darglobal.co.uk/w-residences', 'https://www.darglobal.co.uk/urban-oasis-by-missoni']
+
+### Tell me about Trump Tower Jeddah. When will it be completed?
+[sarvam/sarvam-105b-conversations | 9134 ms]
+
+Trump Tower Jeddah is a 47-floor Trump-branded seafront residential tower on the Jeddah Corniche, developed by DarGlobal [Trump Tower Jeddah](https://www.darglobal.co.uk/trump-tower-jeddah). It offers one- to four-bedroom apartments and three- and four-bedroom penthouses with direct Red Sea views, alongside the Trump Private Club. The project is valued at SAR 2 billion, approximately USD 531 million [DarGlobal - Partners / The Trump Organization](https://www.darglobal.co.uk/partners/the-trump-organization).
+
+Completion is scheduled for December 2029. Buyers can contact the sales team directly for current availability, payment plan structure, and brochure download [Trump Tower Jeddah](https://www.darglobal.co.uk/trump-tower-jeddah).
+sources: ['https://www.darglobal.co.uk/trump-tower-jeddah', 'https://www.darglobal.co.uk/trump-international-hotel-and-tower-dubai', 'https://www.darglobal.co.uk/aida-trump-international-cliff-villas', 'https://www.darglobal.co.uk/partners/the-trump-organization']
+
+### Which DarGlobal projects are in Oman?
+[sarvam/sarvam-105b-conversations | 29365 ms]
+
+DarGlobal has 12 projects in Oman, according to the data:
+
+- **Trump International Hotel** [Muscat; Hotel Rooms; completion December 2028](https://www.darglobal.co.uk/aida-trump-international-hotel)
+- **Trump Cliff Villas** [Muscat; Villas; 3 Bedrooms; completion December 2028](https://www.darglobal.co.uk/aida-trump-international-cliff-villas)
+- **Trump Golf Villas** [Muscat; Villas; 5 Bedrooms; completion December 2028](https://www.darglobal.co.uk/aida-trump-villas)
+- **Aida** [Apartments](https://www.darglobal.co.uk/landing-page/aida)
+- **Fairway Villas** [Aida; Villas; 4 and 5 Bedrooms; completion December 2028](https://www.darglobal.co.uk/fairway-villas-aida-oman)
+- **Azure Oceanfront Villas Interiors by Fendi Casa** [AIDA | Oman; Villas; completion December 2029](https://www.darglobal.co.uk/one-of-one/fendi-casa-azure-oceanfront-villas)
+- **Amour Sans Detour** [AIDA, Muscat; Villas; completion December 2029](https://www.darglobal.co.uk/amour-sans-detour)
+- **The Great Escape** [Aida; Apartments; 1 to 3 Bedrooms; completion June 2029](https://www.darglobal.co.uk/the-great-escape-1-aida-oman)
+- **The Great Escape 2** [Aida; Apartments; 1 to 3 Bedrooms; completion June 2029](https://www.darglobal.co.uk/the-great-escape-2-aida-oman)
+- **Coastal Investment Villas** [Muscat; Apartments; 3 Bedrooms; completion December 2027](https://www.darglobal.co.uk/aida-coastal-investment-villas)
+- **Sunrise Haven** [AIDA, Muscat; Villas; completion December 2027](https://www.darglobal.co.uk/Sunrise-Haven-Luxury-Villas)
+- **Marriott Residences Aida** [Aida; Apartments; completion September 2029](https://www.darglobal.co.uk/marriott-residences-aida-oman)
+
+The Great Escape is currently sold out and consists of unfurnished apartments ranging from 50 to 375 SQM.
+sources: ['https://www.darglobal.co.uk/projects', 'https://www.darglobal.co.uk/insights', 'https://www.darglobal.co.uk/w-residences', 'https://www.darglobal.co.uk/urban-oasis-by-missoni']
+
+### What amenities does the Astera in Ras Al Khaimah offer?
+[sarvam/sarvam-105b-conversations | 8572 ms]
+
+According to the DarGlobal source, [The Astera, Interiors by Aston Martin](https://www.darglobal.co.uk/the-astera) offers the following amenities:
+
+*   Direct beach access
+*   Infinity pool
+*   Spa and sauna
+*   Pool bar
+*   Fitness centre
+*   Indoor cinema
+*   Yoga lawn
+*   Multipurpose hall
+*   Children's play area
+*   Premium 24/7 security
+
+Additionally, beach villas provide private access to the shoreline directly from the residence.
+sources: ['https://www.darglobal.co.uk/the-astera', 'https://www.darglobal.co.uk/partners/aston-martin', 'https://wasalt.sa/en/properties-for-rent-in-east-riyadh-al-khaleej', 'https://wasalt.sa/en/properties-for-rent-in-al-khobar']
+
+### Why does DarGlobal say I should invest in Dubai?
+[sarvam/sarvam-105b-conversations | 21177 ms]
+
+According to the provided context, DarGlobal highlights the following reasons to invest in Dubai:
+
+- **Tax-free environment**: Dubai levies 0% income tax and 0% property tax, leaving greater profits for investors [2][6].
+- **High rental yields**: Investors can expect rental yields of around 5% to 9% [2], with specific data showing 7.3% for apartments and 5% for villas [5].
+- **Strong economic growth**: Dubai's GDP was estimated at $116 billion USD in 2024, with the non-oil sector expected to grow at 4-5% annually in 2025 [5].
+- **Market momentum**: Real estate transaction volume increased by 26% in H1 2025, with foreign investment reaching $62.2 billion USD in the same period [5].
+- **Golden Visa benefits**: A 10-year Golden Visa can be secured with a 2 million AED investment, which now includes off-plan properties [6].
+- **High returns on investment (ROI)**: Potential ROI is between 5% to 8%, with up to 40% annual capital appreciation possible in prime locations [2][6].
+- **Tourism-driven demand**: Dubai welcomed 11.17 million international visitors in Q4 2025, with holiday home regulations allowing over 22,000 registered short-stay properties offering 9%-12% ROI in top zones [5][6].
+- **Prime locations and lifestyle**: Investors are drawn to iconic areas like Palm Jumeirah and Downtown Dubai, which cater to high-net-worth individuals and offer a cosmopolitan lifestyle [5][6].
+
+DarGlobal also promotes its own projects in Dubai, such as [D-Villas at Jumeirah Golf Estates](https://www.darglobal.co.uk/blog) and [DG1](https://www.darglobal.co.uk/blog), as fine investment opportunities in the city's hot-spot areas [1].
+sources: ['https://www.darglobal.co.uk/blog', 'https://www.darglobal.co.uk/faq', 'https://www.darglobal.co.uk/why-invest', 'https://www.darglobal.co.uk/trump-international-hotel-and-tower-dubai']
+
+### Who are DarGlobal's brand partners?
+[sarvam/sarvam-105b-conversations | 14133 ms]
+
+Based on the context provided, DarGlobal's brand partners include:
+
+*   **Aston Martin** – collaborating on a residential development in Ras Al Khaimah, UAE [DarGlobal - Partners / Aston Martin](https://www.darglobal.co.uk/partners/aston-martin).
+*   **Marriott** – through a licensing agreement for the [Marriott Residences Aida, Oman](https://www.darglobal.co.uk/marriott-residences-aida-oman).
+*   **Lamborghini** – partnering on [Tierra Viva](https://www.darglobal.co.uk/partners/lamborghini) in Benahavís, Spain.
+*   **Dolce & Gabbana** – mentioned in relation to a project.
+*   **The Trump Organization** – developing signature villas, a hotel, and a golf course on the AIDA project in Muscat, Oman [DarGlobal - About](https://www.darglobal.co.uk/about).
+*   **Pagani** – collaborating on the DaVinci tower in Dubai [DarGlobal - Partners / Pagani](https://www.darglobal.co.uk/partners/pagani).
+*   **W Hotels** – a collaboration for hotel-inspired living in Dubai [DarGlobal - Partners / W Hotels](https://www.darglobal.co.uk/partners/w-hotels).
+sources: ['https://www.darglobal.co.uk/faq', 'https://www.darglobal.co.uk/partners/aston-martin', 'https://www.darglobal.co.uk/marriott-residences-aida-oman', 'https://www.darglobal.co.uk/about']
+
+### What is the median price of apartments for sale in Riyadh on Wasalt?
+[sarvam/sarvam-105b-conversations | 6136 ms]
+
+According to the Wasalt market snapshot for Riyadh, the median price of apartments for sale is **SAR 789,000**.
+
+This figure is based on a sample of 151 listings from wasalt.sa as of 2026-09-02. Please note that this is a market snapshot from a sample and not the full inventory.
+
+Source: [Wasalt market snapshot - Riyadh](https://wasalt.sa/en/properties-for-sale-in-riyadh)
+sources: ['https://wasalt.sa/en/property/sale/apartment-with-3-bedrooms-5898653', 'https://wasalt.sa/en/property/sale/apartment-with-4-bedrooms-5898652', 'https://wasalt.sa/en/property/sale/apartment-13505-sqm-with-2-bedrooms-5897988', 'https://wasalt.sa/en/property/sale/apartment-with-3-bedrooms-5816304']
+
+### Show me some villas for rent in Jeddah.
+[sarvam/sarvam-105b-conversations | 23987 ms]
+
+Here are some villas for rent in Jeddah from the Wasalt marketplace sample:
+
+- **Villa 300 SQM with 6 Bedrooms** in Al Falah, East Jeddah. SAR 65,000 per year. [Source](https://wasalt.sa/en/property/rent/villa-300-sqm-with-6-bedrooms-5859005)
+- **Villa 250 SQM Facing North with 6 Bedrooms** in Al Falah, East Jeddah. SAR 55,000 per year. [Source](https://wasalt.sa/en/property/rent/villa-250-sqm-facing-north-with-6-bedrooms-5895280)
+- **Villa 450 SQM Facing West with 6 Bedrooms** in Al Falah, East Jeddah. SAR 38,000 per year. [Source](https://wasalt.sa/en/property/rent/villa-450-sqm-facing-west-with-6-bedrooms-5798968)
+- **Villa 301.02 SQM Facing South with 7 Bedrooms** in Al Khaledeyyah, North Jeddah. SAR 180,000 per year. [Source](https://wasalt.sa/en/property/rent/villa-30102-sqm-facing-south-with-7-bedrooms-5888940)
+
+Wasalt lists 2,270 properties for rent in Jeddah in total. The sample above reflects a selection of available villas.
+
+DarGlobal does not have villa rental listings in its provided context. If you need more details on a specific property, you could ask for its specifications or location.
+sources: ['https://wasalt.sa/en/property/rent/villa-300-sqm-with-6-bedrooms-5859005', 'https://wasalt.sa/en/property/rent/villa-250-sqm-facing-north-with-6-bedrooms-5895280', 'https://wasalt.sa/en/properties-for-rent-in-jeddah', 'https://wasalt.sa/en/properties-for-rent-in-buraidah']
+
+### Are there any land plots for sale in Dammam? What sizes and prices?
+[sarvam/sarvam-105b-conversations | 20074 ms]
+
+Yes, there are land plots for sale in Dammam based on the Wasalt sample. The available sizes and prices are:
+
+- **600 sqm** facing south on a 40m-width street: **SAR 2,000,040** [Land 600 SQM Facing South on 40m Width Street](https://wasalt.sa/en/property/sale/land-600-sqm-facing-south-on-40m-width-street-5895045)
+- **390 sqm** facing south on a 30m-width street: **SAR 897,000** [Land 390 SQM Facing South on 30m Width Street](https://wasalt.sa/en/property/sale/land-390-sqm-facing-south-on-30m-width-street-5839148)
+- **525.29 sqm** facing south-east on a 25m-width street: **SAR 1,155,638** [Land 525.29 SQM Facing South East on 25m Width Street](https://wasalt.sa/en/property/sale/land-52529-sqm-facing-south-east-on-25m-width-street-5898249)
+- **360 sqm** facing south on a 30m-width street: **SAR 828,000** [Land 360 SQM Facing South on 30m Width Street](https://wasalt.sa/en/property/sale/land-360-sqm-facing-south-on-30m-width-street-5839145)
+
+These figures are computed from a sample of the Wasalt marketplace and may not reflect the full inventory.
+sources: ['https://wasalt.sa/en/property/sale/land-600-sqm-facing-south-on-40m-width-street-5895045', 'https://wasalt.sa/en/property/sale/land-390-sqm-facing-south-on-30m-width-street-5839148', 'https://wasalt.sa/en/property/sale/land-52529-sqm-facing-south-east-on-25m-width-street-5898249', 'https://wasalt.sa/en/property/sale/land-360-sqm-facing-south-on-30m-width-street-5839145']
+
+### How many listings does Wasalt have in Makkah?
+[sarvam/sarvam-105b-conversations | 9989 ms]
+
+Based on the Wasalt market snapshot for Makkah, sampled on 2026-09-02, the total number of listings is 141. This figure is based on a sample of the marketplace and does not represent the full inventory.
+
+The breakdown by property type is as follows:
+*   Apartment for rent: 18 listings
+*   Apartment for sale: 59 listings
+*   Building for rent: 5 listings
+*   Building for sale: 6 listings
+*   Floor for sale: 1 listing
+*   Land for rent: 4 listings
+*   Land for sale: 24 listings
+*   Room for rent: 2 listings
+*   Villa for rent: 5 listings
+*   Villa for sale: 17 listings
+
+Source: [Wasalt market snapshot - Makkah](https://wasalt.sa/en/properties-for-sale-in-makkah)
+sources: ['https://wasalt.sa/en/property/sale/building-with-7-floors-5898220', 'https://wasalt.sa/en/property/sale/apartment-5871634', 'https://wasalt.sa/en/property/sale/building-864-sqm-facing-east-5875055', 'https://wasalt.sa/en/property/sale/apartment-5871633']
+
+### What is the weather like in Riyadh today?
+[sarvam/sarvam-105b-conversations | 4454 ms]
+
+I don't have that information in my data. The provided context fo
