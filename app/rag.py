@@ -45,6 +45,14 @@ class KnowledgeBase:
         self.ptypes = np.array([d["meta"].get("property_type", "") for d in self.docs])
         self.cities = np.array([d["meta"].get("city", "") for d in self.docs])
         self.purposes = np.array([d["meta"].get("purpose", "") for d in self.docs])
+        self.project_titles = set()
+        for d in self.docs:
+            if d["meta"]["source"] == "darglobal" and d["meta"].get("kind") == "project":
+                t = d["meta"]["title"].lower()
+                self.project_titles.add(t)
+                short = re.split(r",| interiors| by | design| at ", t)[0].strip()
+                if len(short) > 3:
+                    self.project_titles.add(short)  # "neptune", "the astera", "tierra viva"...
         log.info("knowledge base ready: %d documents", len(self.docs))
 
     # ------------------------------------------------------------ retrieval
@@ -104,8 +112,11 @@ class KnowledgeBase:
         purpose = "rent" if re.search(r"\b(rent|rental|lease|renting)\b", q) else ("sale" if re.search(r"\b(sale|buy|purchase|buying)\b", q) else None)
         ptype = next((v for w, v in self.TYPE_WORDS.items() if re.search(rf"\b{w}\b", q)), None)
         city = next((v for w, v in self.CITY_WORDS.items() if w in q), None)
-        if not (ptype or city):
+        listing_intent = bool(ptype or purpose or re.search(r"\b(propert(y|ies)|listings?|wasalt|price|prices|sqm|bedroom)", q))
+        if not city and not ptype:
             return []
+        if not listing_intent or any(t in q for t in self.project_titles):
+            return []  # a DarGlobal project question that merely names a city
         mask = self.kinds == "listing"
         if ptype:
             mask &= self.ptypes == ptype

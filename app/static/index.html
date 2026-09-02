@@ -206,8 +206,10 @@ form.addEventListener("submit", async e => {
       }
     }
   } catch (err) { failed = "Could not reach the API: " + err.message; }
-  if (!answer) bot.innerHTML = '<p class="err">⚠️ ' + esc(failed || "The model returned no answer, please try again.") + '</p>';
-  else if (failed) bot.innerHTML += '<p class="err">⚠️ ' + esc(failed) + '</p>';
+  if (failed) console.warn("chat error:", failed);
+  const friendly = f => /401|403|User not found|API_KEY/.test(f) ? "The AI model key is missing or invalid on the server (HTTP 401)." : /429|rate/i.test(f) ? "The free model is rate limited right now. Please try again in a minute." : /Could not reach/.test(f) ? f : "The AI model did not respond. Please try again.";
+  if (!answer) bot.innerHTML = '<p class="err">⚠️ ' + esc(friendly(failed || "no answer")) + '</p>';
+  else if (failed) bot.innerHTML += '<p class="err">⚠️ ' + esc(friendly(failed)) + '</p>';
   const meta = document.createElement("div"); meta.className = "meta";
   if (sources.length) meta.innerHTML = '<span class="lbl">Sources</span>' + sources.slice(0, 6).map(s => `<a class="src ${s.source}" href="${s.url}" target="_blank" rel="noopener" title="${esc(s.url)}">${esc(s.title)}</a>`).join("");
   if (model) meta.innerHTML += `<span class="model">${esc(model)}</span>`;
