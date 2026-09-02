@@ -41,8 +41,8 @@ Browser (Vercel static page) ──► FastAPI /api/chat/stream ──► hybrid
 | DarGlobal | Project catalogue (title, country, type, bedrooms, completion date) | Public Strapi endpoint `strapi.darglobal.co.uk/api/projects` | 36 projects, 7 countries |
 | DarGlobal | Project pages (about, amenities, why invest, location, FAQs, disclaimers) | Headed Chrome via Playwright, parsing the server-rendered `__NEXT_DATA__` JSON (the site is behind Imperva/Incapsula) | 36 pages |
 | DarGlobal | Company pages (about, FAQ, why invest, investor, partners, one-of-one, tokenization...) | same | 24 pages |
-| Wasalt | Property listings for sale and rent (price, type, size, beds, district, city, broker type, REGA status) | Playwright, public city and district category pages from the sitemap, parsing `__NEXT_DATA__` | ~2,000 listings across 15 cities |
-| Wasalt | City guide texts and per-city market snapshots (counts, price ranges, medians computed from the sample) | derived | 24 guides + 1 snapshot per city |
+| Wasalt | Property listings for sale and rent (price, type, size, beds, district, city, broker type, REGA status) | Playwright, public city and district category pages from the sitemap, parsing `__NEXT_DATA__` | 2,492 listings across 15 cities (plus Riyadh regions) |
+| Wasalt | City guide texts and per-city market snapshots (counts, price ranges, medians computed from the sample) | derived | 37 guides + 1 snapshot per city |
 
 Scraping notes: only public pages were used, `robots.txt` was respected
 (Wasalt disallows `/search`, which is not used), requests were throttled to a
@@ -54,7 +54,7 @@ The Wasalt data is a **sample** of the marketplace, and the chatbot says so.
 ```bash
 cp .env.example .env            # add your OpenRouter key
 docker compose up --build       # first build embeds the data, ~5 minutes
-open http://localhost:8000
+open http://localhost:8080
 ```
 
 Without Docker:
@@ -87,7 +87,7 @@ python -m ingest.build_index
 | `GET /api/search?q=...` | debug: passages the retriever selects |
 
 ```bash
-curl -s localhost:8000/api/chat -H 'content-type: application/json' \
+curl -s localhost:8080/api/chat -H 'content-type: application/json' \
   -d '{"message":"Which DarGlobal projects are in Oman?"}' | jq .answer
 ```
 

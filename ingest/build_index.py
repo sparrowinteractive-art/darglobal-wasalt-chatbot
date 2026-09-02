@@ -154,6 +154,8 @@ def listing_text(l: dict) -> str:
     price = money(l.get("price"), l.get("currency") or "SAR")
     if l["purpose"] == "rent" and l.get("rent_frequency"):
         price += f" per {l['rent_frequency']}"
+    elif l["purpose"] == "sale" and l.get("property_type") == "Land" and (l.get("price") or 0) < 50000:
+        price += " (as listed; likely price per sqm)"
     parts.append(f"Price: {price}.")
     specs = []
     if l.get("bedrooms") is not None:
@@ -243,9 +245,10 @@ def wasalt_docs() -> list[dict]:
         })
     for g in load("wasalt_city_guides.json"):
         text = f"Wasalt guide: {g.get('title')}. Wasalt lists {g.get('total_listings')} properties {('for sale' if g['purpose']=='sale' else 'for rent')} in {g['city'].replace('-', ' ').title()}.\n{g.get('meta_description') or ''}\n{g.get('text') or ''}"
+        slug = g["url"].rstrip("/").rsplit("/", 1)[-1]
         for i, c in enumerate(chunk(text)):
             docs.append({
-                "id": f"ws-guide-{g['city']}-{g['purpose']}-{i}",
+                "id": f"ws-guide-{slug}-{i}",
                 "text": c,
                 "meta": {"source": "wasalt", "kind": "guide", "title": g.get("title") or "", "url": g["url"], "country": "Saudi Arabia", "city": g["city"].replace("-", " ").title(), "property_type": ""},
             })

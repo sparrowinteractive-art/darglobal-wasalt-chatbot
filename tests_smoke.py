@@ -1,6 +1,6 @@
 """Ask the running API a set of representative questions and print the answers.
 
-Usage: python tests_smoke.py [http://localhost:8000]
+Usage: python tests_smoke.py [http://localhost:8080]
 """
 import json
 import sys
@@ -8,7 +8,7 @@ import time
 
 import httpx
 
-BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8000"
+BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8080"
 QUESTIONS = [
     "What DarGlobal projects are in Saudi Arabia?",
     "Tell me about Trump Tower Jeddah. When will it be completed?",

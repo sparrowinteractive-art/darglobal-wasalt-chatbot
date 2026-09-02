@@ -27,7 +27,7 @@ def clean_html(text: str | None) -> str:
     text = str(text)
     text = re.sub(r"<\s*(br|/p|/div|/li|/h\d)\s*/?>", "\n", text, flags=re.I)
     text = _TAG_RE.sub(" ", text)
-    text = unescape(text)
+    text = unescape(text).replace("\xa0", " ")
     text = _WS_RE.sub(" ", text)
     text = _NL_RE.sub("\n", text)
     return "\n".join(line.strip() for line in text.split("\n")).strip()

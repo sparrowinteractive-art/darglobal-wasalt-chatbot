@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import re
 import sys
 import time
 
@@ -49,8 +50,11 @@ NOISE_KEYS = {
     "HeroBanner", "HeroBannerMobile", "Background", "video", "Video",
     "PhotoGallery", "galleryList", "file", "path", "isVisibleInListView",
     "projectCode", "slug", "__component", "ProjectCardImage", "cardImage",
-    "OtherProject", "reqHeaders", "abTestVariant",
+    "OtherProject", "reqHeaders", "abTestVariant", "type", "uniqueKey", "fieldId",
+    "imagePosition", "contentPosition", "displayOrder", "showOnLive", "showOnStaging",
+    "metaRobots", "metaViewport", "sidebarLabel", "videoUrl", "VideoMoblieURL",
 }
+_FILE_RE = re.compile(r"\.(png|jpe?g|webp|svg|gif|mp4|webm|pdf)$", re.I)
 
 
 def flatten_text(obj, path: str = "", out: list | None = None) -> list[tuple[str, str]]:
@@ -67,7 +71,7 @@ def flatten_text(obj, path: str = "", out: list | None = None) -> list[tuple[str
             flatten_text(v, f"{path}[{i}]", out)
     elif isinstance(obj, str):
         s = clean_html(obj)
-        if len(s) > 2 and not s.startswith(("http", "/", "#")):
+        if len(s) > 2 and not s.startswith(("http", "/", "#")) and not _FILE_RE.search(s):
             out.append((path, s))
     return out
 
@@ -144,8 +148,37 @@ def parse_project(pp: dict, base: dict) -> dict:
         "faqs": faqs,
         "extra_text": text_block({k: v for k, v in details.items() if k not in skip}),
     })
-    if not rec["about"] and pp.get("oneOfOneData"):
-        rec["extra_text"] = text_block(pp.get("oneOfOneData")) + "\n" + text_block(pp.get("collectionsData"))
+    if not rec["about"] and pp.get("collectionsData"):
+        # "One of One" collection pages: the project text lives in the matching collection entry
+        page_slug = (pp.get("slug") or base["path"].rstrip("/").rsplit("/", 1)[-1]).lower()
+        entry = None
+        for c in pp["collectionsData"]:
+            ca = c.get("attributes", c)
+            slugs = {str(ca.get("slug", "")).lower(), str(ca.get("uniqueSlug", "")).lower()}
+            if page_slug in slugs:
+                entry = ca
+                break
+        if entry is None:
+            words = set(re.findall(r"[a-z]+", base["title"].lower())) - {"the", "by", "of", "with", "interiors"}
+            entry = max(
+                (c.get("attributes", c) for c in pp["collectionsData"]),
+                key=lambda ca: len(words & set(re.findall(r"[a-z]+", str(ca.get("title", "")).lower()))),
+                default=None,
+            )
+        if entry:
+            rec["about"] = rich_text(entry.get("description"))
+            rec["location_name"] = clean_html(entry.get("location")) or rec.get("location_name")
+            sections = []
+            for s in entry.get("content") or []:
+                t, d = clean_html(s.get("title")), rich_text(s.get("description"))
+                if d:
+                    sections.append(f"{t}: {d}" if t else d)
+            rec["extra_text"] = "\n".join(sections)
+            rec["one_of_one"] = True
+    if len(rec["about"]) + len(rec["extra_text"]) < 200:
+        # landing-page style projects (Amaya, Rayana, Aida...) keep their copy in pageData
+        # with a different component layout; fall back to a generic text dump
+        rec["extra_text"] = text_block(pp.get("pageData") or pp.get("projectDetailsData") or {})
     return rec
 
 

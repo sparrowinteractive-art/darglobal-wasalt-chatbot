@@ -4,118 +4,216 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DarGlobal & Wasalt Property Assistant</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏙️</text></svg>">
+<meta name="description" content="Ask about DarGlobal luxury developments and Wasalt property listings in Saudi Arabia.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%23191919'/><path d='M18 44V20h10a12 12 0 0 1 0 24z' fill='none' stroke='%23b59a5b' stroke-width='4'/><path d='M36 44l6-24 6 24' fill='none' stroke='%23b59a5b' stroke-width='4' stroke-linejoin='round'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f1115;--panel:#171a21;--panel2:#1f232c;--text:#e8e9ec;--muted:#9aa0ab;--accent:#c9a961;--accent2:#7cc4ff;--user:#2a3140;--border:#2a2f3a}
+:root{
+  --ink:#191919; --ink-2:#4a4c4f; --muted:#737373; --line:#e6e1d8; --line-2:#d2d2d7;
+  --paper:#faf8f4; --paper-2:#f3efe7; --card:#ffffff;
+  --gold:#6b5e43; --gold-2:#b59a5b; --gold-3:#e9dfc8; --gold-soft:#f7f2e8;
+  --wasalt:#6f10a2; --wasalt-soft:#f4edfb;
+  --ok:#10a962; --bad:#d32f2f;
+  --radius:16px; --shadow:0 10px 30px rgba(25,25,25,.06);
+  --font-head:"Syne",Inter,system-ui,sans-serif; --font-body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column}
-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--panel)}
-header h1{font-size:16px;margin:0;font-weight:600}
-header .sub{font-size:12px;color:var(--muted)}
-header .dot{width:8px;height:8px;border-radius:50%;background:#4caf50;margin-left:auto}
-header .dot.off{background:#e05353}
-main{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;max-width:900px;width:100%;margin:0 auto}
-.msg{max-width:85%;padding:12px 16px;border-radius:14px;line-height:1.5;font-size:15px;white-space:pre-wrap;word-wrap:break-word}
-.msg.user{align-self:flex-end;background:var(--user);border-bottom-right-radius:4px}
-.msg.bot{align-self:flex-start;background:var(--panel2);border-bottom-left-radius:4px;white-space:normal}
-.msg.bot p{margin:0 0 8px}.msg.bot ul,.msg.bot ol{margin:4px 0 8px 20px;padding:0}.msg.bot li{margin:2px 0}
-.msg.bot a{color:var(--accent2);text-decoration:none}.msg.bot a:hover{text-decoration:underline}
-.msg.bot strong{color:var(--accent)}
-.meta{font-size:11px;color:var(--muted);margin-top:8px;border-top:1px solid var(--border);padding-top:6px}
-.meta a{color:var(--muted)}
-.src{display:inline-block;background:var(--bg);border:1px solid var(--border);border-radius:999px;padding:2px 8px;margin:2px 4px 0 0;font-size:11px}
-.src.darglobal{border-color:#6b5a2e}.src.wasalt{border-color:#2e5a6b}
-.chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 20px 8px;max-width:900px;width:100%;margin:0 auto}
-.chip{background:var(--panel);border:1px solid var(--border);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--muted)}
-.chip:hover{color:var(--text);border-color:var(--accent)}
-form{display:flex;gap:10px;padding:14px 20px 20px;max-width:900px;width:100%;margin:0 auto}
-input{flex:1;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:15px;outline:none}
-input:focus{border-color:var(--accent)}
-button{padding:12px 18px;border-radius:12px;border:none;background:var(--accent);color:#111;font-weight:600;cursor:pointer}
-button:disabled{opacity:.5;cursor:default}
-.typing{color:var(--muted);font-size:13px}
+html,body{height:100%}
+body{margin:0;font-family:var(--font-body);background:var(--paper);color:var(--ink);display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:
+  radial-gradient(900px 400px at 10% -10%, rgba(181,154,91,.14), transparent 60%),
+  radial-gradient(700px 300px at 100% 0%, rgba(111,16,162,.06), transparent 60%);z-index:0}
+header{position:relative;z-index:1;background:var(--ink);color:#fff;border-bottom:3px solid var(--gold-2)}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px;width:100%}
+.hdr{display:flex;align-items:center;gap:16px;height:68px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+.logo .mark{width:38px;height:38px;border:1.5px solid var(--gold-2);border-radius:10px;display:grid;place-items:center;font-family:var(--font-head);font-weight:700;color:var(--gold-2);letter-spacing:.5px;font-size:13px}
+.logo h1{margin:0;font-family:var(--font-head);font-size:17px;font-weight:600;letter-spacing:.3px;line-height:1.1}
+.logo small{display:block;font-family:var(--font-body);font-size:11px;color:#bdb6a8;font-weight:400;letter-spacing:.6px;text-transform:uppercase;margin-top:3px}
+.status{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:#bdb6a8}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(16,169,98,.18)}
+.dot.off{background:var(--bad);box-shadow:0 0 0 3px rgba(211,47,47,.18)}
+.newchat{background:transparent;border:1px solid #3a3a3a;color:#ddd;border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit}
+.newchat:hover{border-color:var(--gold-2);color:#fff}
+main{position:relative;z-index:1;flex:1;overflow-y:auto;scroll-behavior:smooth}
+#chat{display:flex;flex-direction:column;gap:18px;padding:28px 20px 12px;max-width:980px;margin:0 auto}
+.hero{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px 28px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;border:1px solid var(--gold-3);pointer-events:none}
+.hero .eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600}
+.hero h2{font-family:var(--font-head);font-size:28px;margin:8px 0 8px;font-weight:600;line-height:1.15}
+.hero p{margin:0;color:var(--ink-2);font-size:15px;line-height:1.55;max-width:640px}
+.brands{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.brand{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:500;border:1px solid var(--line-2);background:var(--paper-2)}
+.brand i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.brand.dg i{background:var(--gold-2)} .brand.ws i{background:var(--wasalt)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:6px}
+.group{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.group h3{margin:0 0 10px;font-family:var(--font-head);font-size:13px;letter-spacing:1.2px;text-transform:uppercase;font-weight:600;display:flex;align-items:center;gap:8px}
+.group.dg h3{color:var(--gold)} .group.ws h3{color:var(--wasalt)}
+.chips{display:flex;flex-direction:column;gap:8px}
+.chip{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14px;cursor:pointer;color:var(--ink);font-family:inherit;transition:.15s;display:flex;align-items:center;gap:10px}
+.chip::before{content:"→";color:var(--muted);font-size:13px}
+.chip:hover{border-color:var(--gold-2);background:var(--gold-soft);transform:translateX(2px)}
+.group.ws .chip:hover{border-color:var(--wasalt);background:var(--wasalt-soft)}
+.row{display:flex;gap:12px;align-items:flex-start}
+.row.user{flex-direction:row-reverse}
+.avatar{width:34px;height:34px;border-radius:10px;flex:none;display:grid;place-items:center;font-family:var(--font-head);font-weight:700;font-size:12px}
+.row.bot .avatar{background:var(--ink);color:var(--gold-2);border:1px solid var(--gold-2)}
+.row.user .avatar{background:var(--gold-3);color:var(--gold)}
+.msg{max-width:min(760px,86%);padding:14px 18px;border-radius:18px;line-height:1.6;font-size:15px;word-wrap:break-word}
+.msg.user{background:var(--ink);color:#fff;border-top-right-radius:6px;white-space:pre-wrap}
+.msg.bot{background:var(--card);border:1px solid var(--line);border-top-left-radius:6px;box-shadow:var(--shadow)}
+.msg.bot p{margin:0 0 10px}.msg.bot p:last-child{margin-bottom:0}
+.msg.bot ul,.msg.bot ol{margin:4px 0 10px 20px;padding:0}.msg.bot li{margin:3px 0}
+.msg.bot h4{font-family:var(--font-head);font-size:15px;margin:10px 0 6px}
+.msg.bot a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-3);font-weight:500}.msg.bot a:hover{border-bottom-color:var(--gold)}
+.msg.bot strong{color:var(--ink);font-weight:600}
+.msg.bot code{background:var(--paper-2);padding:1px 5px;border-radius:5px;font-size:13px}
+.msg.bot table{border-collapse:collapse;margin:8px 0;font-size:14px;display:block;overflow-x:auto}
+.msg.bot th,.msg.bot td{border:1px solid var(--line);padding:6px 10px;text-align:left}
+.msg.bot th{background:var(--paper-2);font-weight:600}
+.meta{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.meta .lbl{letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-right:2px}
+.src{display:inline-flex;align-items:center;gap:6px;background:var(--paper);border:1px solid var(--line-2);border-radius:999px;padding:3px 10px;font-size:11px;color:var(--ink-2);text-decoration:none;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.src::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold-2);flex:none}
+.src.wasalt::before{background:var(--wasalt)}
+.src:hover{border-color:var(--gold-2)} .src.wasalt:hover{border-color:var(--wasalt)}
+.model{margin-left:auto;font-size:10px;color:var(--muted);letter-spacing:.3px}
+.typing{display:inline-flex;gap:5px;align-items:center;color:var(--muted);font-size:13px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--gold-2);animation:b 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes b{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+.err{color:var(--bad)}
+footer{position:relative;z-index:1;background:transparent;padding:10px 20px 18px}
+form{max-width:980px;margin:0 auto;display:flex;gap:10px;background:var(--card);border:1px solid var(--line-2);border-radius:18px;padding:8px 8px 8px 16px;box-shadow:var(--shadow);align-items:center}
+form:focus-within{border-color:var(--gold-2);box-shadow:0 0 0 4px rgba(181,154,91,.15)}
+input{flex:1;border:none;background:transparent;font-size:15px;outline:none;color:var(--ink);font-family:inherit;min-width:0}
+input::placeholder{color:var(--muted)}
+button.send{border:none;background:var(--ink);color:#fff;border-radius:12px;padding:11px 18px;font-weight:600;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.15s}
+button.send:hover{background:var(--gold)}
+button.send:disabled{opacity:.45;cursor:default}
+.foot{max-width:980px;margin:8px auto 0;text-align:center;font-size:11px;color:var(--muted)}
+.foot a{color:var(--muted)}
+@media (max-width:720px){.grid{grid-template-columns:1fr}.hero h2{font-size:22px}.msg{max-width:92%}.logo small{display:none}.status span{display:none}.avatar{display:none}}
 </style>
 </head>
 <body>
 <header>
-  <span style="font-size:22px">🏙️</span>
-  <div><h1>DarGlobal &amp; Wasalt Property Assistant</h1><div class="sub">RAG chatbot over publicly scraped data · free OpenRouter model</div></div>
-  <span class="dot" id="dot" title="API status"></span>
+  <div class="wrap hdr">
+    <a class="logo" href="./">
+      <span class="mark">DG</span>
+      <span><h1>Property Assistant</h1><small>DarGlobal &middot; Wasalt</small></span>
+    </a>
+    <div class="status"><span class="dot" id="dot" title="API status"></span><span id="statusText">Checking API…</span></div>
+    <button class="newchat" id="newchat" type="button">New chat</button>
+  </div>
 </header>
-<main id="chat">
-  <div class="msg bot">Hi! Ask me about <strong>DarGlobal</strong> luxury projects (Dubai, Riyadh, Jeddah, Muscat, Doha, Marbella, London) or <strong>Wasalt</strong> property listings across Saudi Arabia.</div>
-</main>
-<div class="chips" id="chips"></div>
-<form id="form">
-  <input id="input" placeholder="e.g. What DarGlobal projects are in Saudi Arabia?" autocomplete="off" />
-  <button id="send" type="submit">Send</button>
-</form>
+
+<main><div id="chat">
+  <section class="hero" id="hero">
+    <div class="eyebrow">AI concierge</div>
+    <h2>Explore luxury developments and Saudi property listings</h2>
+    <p>Ask about DarGlobal's branded residences in Dubai, Riyadh, Jeddah, Muscat, Doha, Marbella or London, or browse a live sample of Wasalt listings for sale and rent across Saudi Arabia. Every answer is grounded in data collected from the two public websites and cites its sources.</p>
+    <div class="brands"><span class="brand dg"><i></i>DarGlobal · 36 projects · 7 countries</span><span class="brand ws"><i></i>Wasalt · 2,400+ listings · 15 cities</span></div>
+  </section>
+  <div class="grid" id="suggestions">
+    <div class="group dg"><h3>DarGlobal</h3><div class="chips" data-group="dg"></div></div>
+    <div class="group ws"><h3>Wasalt</h3><div class="chips" data-group="ws"></div></div>
+  </div>
+</div></main>
+
+<footer>
+  <form id="form">
+    <input id="input" placeholder="Ask about a project, a city, prices, amenities…" autocomplete="off" maxlength="2000" />
+    <button class="send" id="send" type="submit">Send <span aria-hidden="true">↗</span></button>
+  </form>
+  <div class="foot">Answers are generated from publicly scraped data (snapshot 2 Sep 2026) using a free OpenRouter model. Not financial advice.</div>
+</footer>
+
 <script src="config.js"></script>
 <script>
 const API = (window.API_BASE || "").replace(/\/$/, "");
 const chat = document.getElementById("chat"), form = document.getElementById("form"), input = document.getElementById("input"), send = document.getElementById("send");
+const hero = document.getElementById("hero"), sugg = document.getElementById("suggestions");
 const history = [];
-const suggestions = [
-  "What DarGlobal projects are in Saudi Arabia?",
-  "Tell me about Trump Tower Jeddah",
-  "Which DarGlobal projects are in Oman and when do they complete?",
-  "What is the median price of apartments for sale in Riyadh on Wasalt?",
-  "Show me villas for rent in Jeddah",
-  "Why should I invest with DarGlobal in Dubai?"
-];
-const chips = document.getElementById("chips");
-suggestions.forEach(s => { const c = document.createElement("span"); c.className = "chip"; c.textContent = s; c.onclick = () => { input.value = s; form.requestSubmit(); }; chips.appendChild(c); });
+const SUGGESTIONS = {
+  dg: ["What DarGlobal projects are in Saudi Arabia?", "Tell me about Trump Tower Jeddah", "Which DarGlobal projects are in Oman and when do they complete?", "Why should I invest with DarGlobal in Dubai?"],
+  ws: ["What is the median price of apartments for sale in Riyadh?", "Show me villas for rent in Jeddah", "Are there land plots for sale in Dammam?", "Compare apartment prices in Makkah and Madinah"]
+};
+for (const [g, list] of Object.entries(SUGGESTIONS)) {
+  const box = document.querySelector(`.chips[data-group="${g}"]`);
+  list.forEach(s => { const c = document.createElement("button"); c.type = "button"; c.className = "chip"; c.textContent = s; c.onclick = () => { input.value = s; form.requestSubmit(); }; box.appendChild(c); });
+}
+fetch(API + "/health").then(r => r.json()).then(h => {
+  const ok = !!h.llm_key_configured; document.getElementById("dot").classList.toggle("off", !ok);
+  document.getElementById("statusText").textContent = ok ? `${h.documents.toLocaleString()} documents · online` : "API key missing";
+}).catch(() => { document.getElementById("dot").classList.add("off"); document.getElementById("statusText").textContent = "API offline"; });
 
-fetch(API + "/health").then(r => r.json()).then(h => { document.getElementById("dot").classList.toggle("off", !h.llm_key_configured); }).catch(() => document.getElementById("dot").classList.add("off"));
-
-function md(text) {
-  let h = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function inline(h) {
   h = h.replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
-  h = h.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-  h = h.replace(/`([^`]+)`/g, "<code>$1</code>");
-  const lines = h.split("\n"); let out = "", inList = false;
+  h = h.replace(/(^|[^"'>])(https?:\/\/[^\s<)]+)/g, (m, pre, url) => pre + '<a href="' + url + '" target="_blank" rel="noopener">' + url.replace(/^https?:\/\/(www\.)?/, "").slice(0, 40) + '</a>');
+  h = h.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/(^|\s)\*([^*\n]+)\*(?=\s|$)/g, "$1<em>$2</em>");
+  return h.replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+function md(text) {
+  const lines = esc(text).split("\n"); let out = "", list = null, table = [];
+  const flushTable = () => { if (!table.length) return; const rows = table.filter(r => !/^\s*\|?\s*:?-{2,}/.test(r)); out += "<table>" + rows.map((r, i) => "<tr>" + r.replace(/^\s*\||\|\s*$/g, "").split("|").map(c => (i ? "<td>" : "<th>") + inline(c.trim()) + (i ? "</td>" : "</th>")).join("") + "</tr>").join("") + "</table>"; table = []; };
   for (const line of lines) {
-    const m = line.match(/^\s*(?:[-*•]|\d+[.)])\s+(.*)$/);
-    if (m) { if (!inList) { out += "<ul>"; inList = true; } out += "<li>" + m[1] + "</li>"; }
-    else { if (inList) { out += "</ul>"; inList = false; } if (line.trim()) out += "<p>" + line.replace(/^#+\s*/, "") + "</p>"; }
+    if (/^\s*\|.*\|\s*$/.test(line)) { table.push(line); continue; } else flushTable();
+    const li = line.match(/^\s*(?:[-*•]|\d+[.)])\s+(.*)$/);
+    if (li) { const t = /^\s*\d/.test(line) ? "ol" : "ul"; if (list !== t) { if (list) out += `</${list}>`; out += `<${t}>`; list = t; } out += "<li>" + inline(li[1]) + "</li>"; continue; }
+    if (list) { out += `</${list}>`; list = null; }
+    const hd = line.match(/^\s*#{1,6}\s+(.*)$/);
+    if (hd) { out += "<h4>" + inline(hd[1]) + "</h4>"; continue; }
+    if (line.trim()) out += "<p>" + inline(line) + "</p>";
   }
-  if (inList) out += "</ul>";
+  if (list) out += `</${list}>`; flushTable();
   return out;
 }
-function add(role, text) { const d = document.createElement("div"); d.className = "msg " + role; if (role === "user") d.textContent = text; else d.innerHTML = text; chat.appendChild(d); chat.scrollTop = chat.scrollHeight; return d; }
+function addRow(role, html) {
+  const row = document.createElement("div"); row.className = "row " + role;
+  const av = document.createElement("div"); av.className = "avatar"; av.textContent = role === "user" ? "You" : "DG";
+  const m = document.createElement("div"); m.className = "msg " + role;
+  if (role === "user") m.textContent = html; else m.innerHTML = html;
+  row.append(av, m); chat.appendChild(row); row.scrollIntoView({ block: "end" }); return m;
+}
+document.getElementById("newchat").onclick = () => { history.length = 0; document.querySelectorAll(".row").forEach(r => r.remove()); hero.style.display = ""; sugg.style.display = ""; input.focus(); };
 
 form.addEventListener("submit", async e => {
   e.preventDefault();
-  const q = input.value.trim(); if (!q) return;
-  input.value = ""; send.disabled = true; chips.style.display = "none";
-  add("user", q);
-  const bot = add("bot", '<span class="typing">Searching the knowledge base…</span>');
-  let answer = "", sources = [], model = "";
+  const q = input.value.trim(); if (!q || send.disabled) return;
+  input.value = ""; send.disabled = true; hero.style.display = "none"; sugg.style.display = "none";
+  addRow("user", q);
+  const bot = addRow("bot", '<span class="typing">Searching the knowledge base <i></i><i></i><i></i></span>');
+  let answer = "", sources = [], model = "", failed = "";
   try {
     const resp = await fetch(API + "/api/chat/stream", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: q, history: history.slice(-6) }) });
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     const reader = resp.body.getReader(); const dec = new TextDecoder(); let buf = "";
     while (true) {
       const { value, done } = await reader.read(); if (done) break;
-      buf += dec.decode(value, { stream: true });
-      let idx;
+      buf += dec.decode(value, { stream: true }); let idx;
       while ((idx = buf.indexOf("\n\n")) >= 0) {
         const block = buf.slice(0, idx); buf = buf.slice(idx + 2);
-        const ev = (block.match(/^event: (.*)$/m) || [])[1]; const data = (block.match(/^data: (.*)$/m) || [])[1];
-        if (!ev) continue;
-        const val = data ? JSON.parse(data) : null;
+        const ev = (block.match(/^event: (.*)$/m) || [])[1], data = (block.match(/^data: (.*)$/m) || [])[1];
+        if (!ev) continue; const val = data ? JSON.parse(data) : null;
         if (ev === "sources") sources = val;
         else if (ev === "model") model = val;
-        else if (ev === "token") { answer += val; bot.innerHTML = md(answer); chat.scrollTop = chat.scrollHeight; }
-        else if (ev === "error") { answer += "\n\n⚠️ " + val; bot.innerHTML = md(answer); }
+        else if (ev === "token") { answer += val; bot.innerHTML = md(answer); bot.parentElement.scrollIntoView({ block: "end" }); }
+        else if (ev === "error") failed = val;
       }
     }
-  } catch (err) { bot.innerHTML = md("⚠️ Could not reach the API: " + err.message); }
-  if (!answer) bot.innerHTML = md("⚠️ The model returned no answer. Please try again.");
+  } catch (err) { failed = "Could not reach the API: " + err.message; }
+  if (!answer) bot.innerHTML = '<p class="err">⚠️ ' + esc(failed || "The model returned no answer, please try again.") + '</p>';
+  else if (failed) bot.innerHTML += '<p class="err">⚠️ ' + esc(failed) + '</p>';
   const meta = document.createElement("div"); meta.className = "meta";
-  meta.innerHTML = (model ? "Model: " + model + "<br>" : "") + (sources.length ? "Sources: " + sources.slice(0, 6).map(s => `<a class="src ${s.source}" href="${s.url}" target="_blank" rel="noopener">${s.title.replace(/</g, "&lt;")}</a>`).join("") : "");
-  bot.appendChild(meta);
-  history.push({ role: "user", content: q }, { role: "assistant", content: answer });
+  if (sources.length) meta.innerHTML = '<span class="lbl">Sources</span>' + sources.slice(0, 6).map(s => `<a class="src ${s.source}" href="${s.url}" target="_blank" rel="noopener" title="${esc(s.url)}">${esc(s.title)}</a>`).join("");
+  if (model) meta.innerHTML += `<span class="model">${esc(model)}</span>`;
+  bot.appendChild(meta); bot.parentElement.scrollIntoView({ block: "end" });
+  if (answer) history.push({ role: "user", content: q }, { role: "assistant", content: answer });
   send.disabled = false; input.focus();
 });
 </script>
