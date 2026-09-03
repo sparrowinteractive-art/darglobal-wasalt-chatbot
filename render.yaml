@@ -1,0 +1,21 @@
+# Render Blueprint: free Docker web service for the chatbot API.
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: darglobal-wasalt-chatbot
+    runtime: docker
+    plan: free
+    region: frankfurt
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: CORS_ORIGINS
+        value: https://darglobal-wasalt-assistant.vercel.app,https://darglobal-wasalt-chatbot-livid.vercel.app
+      - key: SARVAM_MODELS
+        value: sarvam-105b-conversations
+      - key: OPENROUTER_MODELS
+        value: google/gemma-4-31b-it:free,z-ai/glm-5.2:free,nvidia/nemotron-3-super-120b-a12b:free,minimax/minimax-m2.7:free
+      - key: SARVAM_API_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false

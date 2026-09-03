@@ -1,3 +1,13 @@
+---
+title: DarGlobal & Wasalt Property Assistant
+emoji: "🏙️"
+colorFrom: yellow
+colorTo: gray
+sdk: docker
+app_port: 8000
+pinned: false
+---
+
 # DarGlobal & Wasalt Property Assistant
 
 An AI chatbot that answers questions about **DarGlobal** luxury developments and
@@ -7,7 +17,7 @@ grounded in that data; a free OpenRouter model writes the reply.
 
 | | |
 |---|---|
-| Live chatbot | `https://<vercel-app>.vercel.app` |
+| Live chatbot | https://darglobal-wasalt-assistant.vercel.app |
 | API (Docker container) | `https://<backend-host>/health` |
 | Source | this repository |
 
@@ -111,7 +121,7 @@ curl -s localhost:8080/api/chat -H 'content-type: application/json' \
 ## Deployment
 
 - **Backend**: the Docker image is deployed on Render (free web service, Docker
-  runtime). Set `OPENROUTER_API_KEY` and `CORS_ORIGINS=https://<vercel-app>.vercel.app`
+  runtime, `render.yaml` blueprint). Set `OPENROUTER_API_KEY` and `CORS_ORIGINS=https://darglobal-wasalt-assistant.vercel.app`
   as environment variables. Any container host works the same way (Railway,
   Fly.io, Hugging Face Spaces, a VM with `docker compose up`).
 - **Frontend**: the `web/` folder is a static site on Vercel. `web/config.js`
