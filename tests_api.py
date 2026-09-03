@@ -1,7 +1,10 @@
 """API contract tests against a running instance. Usage: python tests_api.py [http://localhost:8080]"""
 import json, sys, time
-import httpx
+import httpx as _httpx
+httpx = _httpx.Client(timeout=180)  # remote free-tier hosts are slow
 B = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8080"; fails = []
+ORIGIN = sys.argv[2] if len(sys.argv) > 2 else "https://example.vercel.app"  # must be in CORS_ORIGINS
+SLOW = 1.0 if "localhost" in B or "127.0.0.1" in B else 15.0  # seconds; free-tier hosts share one slow CPU
 def check(name, cond, info=""):
     print(("PASS" if cond else "FAIL"), name, info)
     if not cond: fails.append(name)
@@ -10,7 +13,7 @@ check("health 200 + fields", r.status_code==200 and h["status"]=="ok" and h["doc
 r=httpx.get(B+"/"); check("index html served", r.status_code==200 and "Property Assistant" in r.text and "text/html" in r.headers["content-type"])
 r=httpx.get(B+"/nope"); check("404 for unknown route", r.status_code==404)
 t0=time.time(); r=httpx.get(B+"/api/search",params={"q":"Trump Tower Jeddah","k":3}); dt=time.time()-t0
-check("search returns k results fast", r.status_code==200 and len(r.json())==3 and dt<2, f"{dt*1000:.0f}ms")
+check("search returns k results fast", r.status_code==200 and len(r.json())==3 and dt<2*SLOW, f"{dt*1000:.0f}ms")
 check("search top hit relevant", "Trump Tower Jeddah" in r.json()[0]["meta"]["title"])
 res=httpx.get(B+"/api/search",params={"q":"apartments for rent in Jeddah","k":6}).json()
 check("structured filter: rent apartments Jeddah", sum(1 for p in res if p["meta"]["kind"]=="listing" and p["meta"].get("purpose")=="rent" and p["meta"]["property_type"]=="Apartment" and p["meta"]["city"]=="Jeddah")>=3)
@@ -44,9 +47,9 @@ check("stream content-type", "text/event-stream" in ct)
 check("stream starts with sources, ends with done", events[0]=="sources" and events[-1]=="done" and ("token" in events or "error" in events), str(sorted(set(events))))
 src=json.loads([l for l in body.splitlines() if l.startswith("data: ")][0][6:])
 check("stream sources include Oman catalogue", any(s["title"]=="DarGlobal projects in Oman" for s in src))
-r=httpx.options(B+"/api/chat",headers={"Origin":"https://example.vercel.app","Access-Control-Request-Method":"POST","Access-Control-Request-Headers":"content-type"})
-check("CORS preflight ok", r.status_code==200 and r.headers.get("access-control-allow-origin") in ("*","https://example.vercel.app"))
+r=httpx.options(B+"/api/chat",headers={"Origin":ORIGIN,"Access-Control-Request-Method":"POST","Access-Control-Request-Headers":"content-type"})
+check("CORS preflight ok", r.status_code==200 and r.headers.get("access-control-allow-origin") in ("*",ORIGIN))
 t0=time.time(); rs=[httpx.get(B+"/api/search",params={"q":f"villa {i}","k":5}) for i in range(10)]; dt=(time.time()-t0)/10
-check("10 searches avg < 1s", all(x.status_code==200 for x in rs) and dt<1, f"avg {dt*1000:.0f}ms")
+check("10 searches avg fast", all(x.status_code==200 for x in rs) and dt<SLOW, f"avg {dt*1000:.0f}ms")
 print("\nAPI:", "ALL PASS" if not fails else f"{len(fails)} FAILED {fails}")
 sys.exit(1 if fails else 0)

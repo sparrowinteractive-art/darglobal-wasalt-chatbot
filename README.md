@@ -18,8 +18,8 @@ grounded in that data; a free OpenRouter model writes the reply.
 | | |
 |---|---|
 | Live chatbot | https://darglobal-wasalt-assistant.vercel.app |
-| API (Docker container) | `https://<backend-host>/health` |
-| Source | this repository |
+| API (Docker container on Render) | https://darglobal-wasalt-chatbot.onrender.com/health |
+| Source | https://github.com/sparrowinteractive-art/darglobal-wasalt-chatbot |
 
 ## Architecture
 
@@ -120,12 +120,18 @@ curl -s localhost:8080/api/chat -H 'content-type: application/json' \
 
 ## Deployment
 
-- **Backend**: the Docker image is deployed on Render (free web service, Docker
-  runtime, `render.yaml` blueprint). Set `OPENROUTER_API_KEY` and `CORS_ORIGINS=https://darglobal-wasalt-assistant.vercel.app`
-  as environment variables. Any container host works the same way (Railway,
-  Fly.io, Hugging Face Spaces, a VM with `docker compose up`).
-- **Frontend**: the `web/` folder is a static site on Vercel. `web/config.js`
-  holds the backend URL.
+- **Backend**: the Docker image runs on Render as a free web service
+  (`render.yaml` blueprint, Docker runtime, health check on `/health`).
+  `SARVAM_API_KEY` and `OPENROUTER_API_KEY` are set as secrets in the Render
+  dashboard; `CORS_ORIGINS` is restricted to the Vercel domain. Every push to
+  `main` redeploys. `deploy/hf_space.py` does the same on a Hugging Face Docker
+  Space (which now requires a PRO plan), and any container host works with
+  `docker compose up`.
+- **Frontend**: the `web/` folder is a static site on Vercel
+  (`npx vercel deploy --prod` from `web/`). `web/config.js` holds the backend URL.
+- **Free-tier behaviour**: the Render instance sleeps after 15 minutes without
+  traffic, so the first question after a pause can take about a minute while the
+  container restarts. Retrieval takes a few seconds on the shared CPU.
 
 ## Limitations
 
