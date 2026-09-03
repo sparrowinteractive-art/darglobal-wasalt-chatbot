@@ -17,5 +17,3 @@ services:
         value: google/gemma-4-31b-it:free,z-ai/glm-5.2:free,nvidia/nemotron-3-super-120b-a12b:free,minimax/minimax-m2.7:free
       - key: SARVAM_API_KEY
         sync: false
-      - key: OPENROUTER_API_KEY
-        sync: false
